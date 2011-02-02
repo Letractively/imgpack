@@ -1,11 +1,13 @@
 // ImagePacker by DAS ( dasannikov@gmail.com )
 
 // Rectangle placer. Usage:
-// 1 - Add all your rectangles in uImagePacker object.
+// 1 - Add() all your rectangles in uImagePacker object.
 // 2 - Callc() it.
 // 3 - uImagePacker::callcList contains output data.
 
-#pragma once
+#ifndef _IMAGE_PLANER_H_
+#define _IMAGE_PLANER_H_
+
 #include <vector>
 
 #define MAX_TEXTURE_SIZE 2048
@@ -51,3 +53,4 @@ private:
 
 };
 
+#endif // _IMAGE_PLANER_H_

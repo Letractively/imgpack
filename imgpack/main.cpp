@@ -159,7 +159,6 @@ void generateImage()
 
 	ilLoadDataL(newImageData, newImageSizeX * newImageSizeY * 4, newImageSizeX, newImageSizeY, 1, 4);
 
-	ilEnable(IL_FILE_OVERWRITE);
 	std::string tmpName = newImageName + ".png";
 	ilSaveImage(tmpName.c_str());
 
@@ -221,6 +220,8 @@ void loadDir( )
 	}
 }
 
+///////////////////////////////////////////////////////////////////////////
+
 void genNames(int i)
 {
 	char tmp[100];
@@ -230,6 +231,8 @@ void genNames(int i)
 	newScriptName = dir + std::string(tmp) + std::string(".us");
 }
 
+///////////////////////////////////////////////////////////////////////////
+
 bool allDone()
 {
 	for(int i = 0; i < (int)images.size(); i++)
@@ -238,14 +241,6 @@ bool allDone()
 
 	return true;
 }
-
-///////////////////////////////////////////////////////////////////////////
-
-void ilTest()
-{
-
-}
-
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -264,6 +259,7 @@ int main(int argc, char *argv[ ])
 	filter = dir + "\\*.png";
 
 	ilInit();
+	ilEnable(IL_FILE_OVERWRITE);
 
 	loadDir();
 	printf("Image loading... DONE\n");
@@ -279,8 +275,6 @@ int main(int argc, char *argv[ ])
 	}
 
 	unloadImages();
-
-	ilTest();
 
 	printf("\nImagePack DONE!\n");
 
