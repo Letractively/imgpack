@@ -32,6 +32,7 @@ std::string newScriptName = "Data.us";
 std::string	filter = "[none]";
 std::string	dir = "";
 
+FILE *f;
 ///////////////////////////////////////////////////////////////////////////
 
 void loadImage(const char * filename)
@@ -129,7 +130,7 @@ void generateImage()
 	planer.calc();
 	printf("DONE [size:%dx%d]\n", planer.outSizeX, planer.outSizeY);
 
-	if((planer.outSizeX * planer.outSizeY) > 2048*2048) {
+	if((planer.outSizeX * planer.outSizeY) > MAX_TEXTURE_SIZE * MAX_TEXTURE_SIZE) {
 		printf("Output image too big. Terminate! \n");
 		return;
 	}
@@ -174,11 +175,6 @@ void generateImage()
 
 	printf("[%s] Script generation... ", newImageName.c_str());
    
-	FILE *f;
-	fopen_s(&f, newScriptName.c_str(), "w");
-	fprintf(f, "// ImgPack\n");
-	fprintf(f, "// FILTER: %s\n\n", filter.c_str());
-
 	for(uImagePlaner::uImageRectList::iterator i = planer.calcList.begin(); i != planer.calcList.end(); i++)
 		if(i->done) {
 			Image* img = findImageData(i->name);
@@ -186,8 +182,6 @@ void generateImage()
 			temp[img->name.copy(temp, img->name.length() - 4)] = 0x0;
 			fprintf(f, "\"%s\" = (\"%s\", %d, %d, %d, %d);\n", temp, newImageName.c_str(), i->rectMinX, i->rectMinY, i->rectMaxX, i->rectMaxY);
 		}
-
-	fclose(f);
 
 	printf("DONE\n");
 }
@@ -225,10 +219,9 @@ void loadDir( )
 void genNames(int i)
 {
 	char tmp[100];
-	sprintf(tmp, "%02d", i);
+	sprintf(tmp, "_%02d", i);
 
 	newImageName = dir + std::string(tmp);
-	newScriptName = dir + std::string(tmp) + std::string(".us");
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -257,12 +250,17 @@ int main(int argc, char *argv[ ])
 
 	dir = argv[1];
 	filter = dir + "\\*.png";
+	newScriptName = dir + ".us";
 
 	ilInit();
 	ilEnable(IL_FILE_OVERWRITE);
 
 	loadDir();
 	printf("Image loading... DONE\n");
+
+	fopen_s(&f, newScriptName.c_str(), "w");
+	fprintf(f, "// ImgPack\n");
+	fprintf(f, "// FILTER: %s\n\n", filter.c_str());
 
 	int i = 1;
 	genNames(i);
@@ -273,6 +271,8 @@ int main(int argc, char *argv[ ])
 		genNames(i);
 		generateImage();
 	}
+
+	fclose(f);
 
 	unloadImages();
 

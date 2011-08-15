@@ -10,7 +10,7 @@
 
 #include <vector>
 
-#define MAX_TEXTURE_SIZE 2048
+#define MAX_TEXTURE_SIZE 1024
 
 class uImagePlaner {
 public:

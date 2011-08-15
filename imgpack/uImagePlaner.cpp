@@ -90,12 +90,7 @@ void uImagePlaner::calc()
 			}
 		}
 
-		if(y <= x)
-			y = y * 2;
-		else {
-			y = y / 2;
-			x = x * 2;
-		}
+		y = x = x * 2;
 
 		if(x > MAX_TEXTURE_SIZE)
 			x = MAX_TEXTURE_SIZE;
