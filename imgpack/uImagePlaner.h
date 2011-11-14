@@ -10,12 +10,13 @@
 
 #include <vector>
 
-#define MAX_TEXTURE_SIZE 1024
-
 class uImagePlaner {
 public:
 
+	uImagePlaner() : maxTextureSize(1024), startTextureSize(1) {}
+
 	void add(int x, int y, const std::string imgName);
+	int getTextureSize(int imgSize);
 	void calc();
 
 	class uImageRect {
@@ -43,6 +44,8 @@ public:
 
 	int outSizeX;
 	int outSizeY;
+	int maxTextureSize;
+	int startTextureSize;
 
 private:
 

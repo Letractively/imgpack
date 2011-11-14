@@ -3,9 +3,15 @@
 #include <string>
 #include <iostream>
 #include <windows.h>
+
 #include <IL/il.h>
+#include <boost/program_options.hpp>
 
 #include "uImagePlaner.h"
+
+///////////////////////////////////////////////////////////////////////////
+
+namespace po = boost::program_options;
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -130,7 +136,7 @@ void generateImage()
 	planer.calc();
 	printf("DONE [size:%dx%d]\n", planer.outSizeX, planer.outSizeY);
 
-	if((planer.outSizeX * planer.outSizeY) > MAX_TEXTURE_SIZE * MAX_TEXTURE_SIZE) {
+	if((planer.outSizeX * planer.outSizeY) > planer.maxTextureSize * planer.maxTextureSize) {
 		printf("Output image too big. Terminate! \n");
 		return;
 	}
@@ -239,8 +245,37 @@ bool allDone()
 
 int main(int argc, char *argv[ ])
 {
-
 	printf("ImagePacker Tool.\n");
+
+/*	// Declare the supported options.
+	po::options_description desc("Allowed options");
+	desc.add_options()
+		("help", "Produce help message")
+		("size", po::value<int>(), "Set max image size (Default = 1024)");
+
+	po::positional_options_description p;
+	p.add("input-file", 1);
+
+
+	po::variables_map vm;
+	po::store(po::command_line_parser(ac, av).options(desc).positional(p).run(), vm);
+	po::notify(vm);    
+
+	if(vm.count("help")) {
+		std::cout << desc << "\n";
+		return 1;
+	}
+
+	if(vm.count("size")) {
+		std::cout << "Max image size set to " << vm["size"].as<int>() << ".\n";
+	} else {
+		std::cout << "Max image size set to default.\n";
+	}
+
+	if(vm.count("input-file"))
+		std::cout << "Input are: " << vm["input-file"].as< vector<string> >() << "\n";
+
+*/
 
 	if(argc == 1) {
 		printf("Work with only PNG images.\n");
@@ -250,7 +285,7 @@ int main(int argc, char *argv[ ])
 
 	dir = argv[1];
 	filter = dir + "\\*.png";
-	newScriptName = dir + ".us";
+	newScriptName = dir + ".utx";
 
 	ilInit();
 	ilEnable(IL_FILE_OVERWRITE);
