@@ -13,6 +13,27 @@ void uImagePlaner::add(int x, int y, const std::string imgName)
 	img.name = imgName;
 
 	rectList.push_back(img);
+
+	if((x > startTextureSize) || (y > startTextureSize))
+		startTextureSize = getTextureSize( (x > y) ? x : y );
+
+	if((x > 1024) || (y > 1024))
+		maxTextureSize = 2048;
+
+//	if((x > 2048) && (y > 2048))
+//		ERROR
+
+}
+
+///////////////////////////////////////////////////////////////////////////
+
+int uImagePlaner::getTextureSize(int imgSize)
+{
+	int i = 1;
+	while(i < imgSize)
+		i *= 2;
+
+	return i;
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -73,11 +94,11 @@ void uImagePlaner::calc()
 	for(uImageRectList::iterator i = rectList.begin(); i != rectList.end(); i++)
 		sizeXY += i->sizeX * i->sizeY;
 
-	int x = 1;
-	int y = 1;
+	int x = startTextureSize;
+	int y = startTextureSize;
 
 	while(true) {	
-		if(((x * y) >= sizeXY) || ((x == MAX_TEXTURE_SIZE) && (y == MAX_TEXTURE_SIZE))) {
+		if(((x * y) >= sizeXY) || ((x == maxTextureSize) && (y == maxTextureSize))) {
 
 			calcList = rectList;
 			std::sort(calcList.begin(), calcList.end());
@@ -92,11 +113,11 @@ void uImagePlaner::calc()
 
 		y = x = x * 2;
 
-		if(x > MAX_TEXTURE_SIZE)
-			x = MAX_TEXTURE_SIZE;
+		if(x > maxTextureSize)
+			x = maxTextureSize;
 		
-		if(y > MAX_TEXTURE_SIZE)
-			y = MAX_TEXTURE_SIZE;
+		if(y > maxTextureSize)
+			y = maxTextureSize;
 		
 	}
 
